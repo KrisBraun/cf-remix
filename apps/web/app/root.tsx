@@ -19,6 +19,7 @@ import {
 } from "@supabase/auth-helpers-remix";
 import type { Database } from "db";
 import { User } from "@supabase/auth-helpers-remix";
+import { withSentry } from "@sentry/remix";
 
 export const loader = async ({ context, request }: LoaderArgs) => {
   const env = {
@@ -52,7 +53,7 @@ export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export default function App() {
+function App() {
   const { env, session } = useLoaderData<typeof loader>();
 
   const { revalidate } = useRevalidator();
@@ -110,3 +111,5 @@ export default function App() {
     </html>
   );
 }
+
+export default withSentry(App);
